@@ -54,9 +54,16 @@ object TempData {
     if(td.precip<1.0) (sum, cnt) else (sum+td.tmax,cnt+1)
     }
     println(s"Average rainy temp is ${rainySum/rainyCount2}")
+        val rainyTemps = data.flatMap(td => if(td.precip<1.0) Seq.empty else Seq(td.tmax))
+    println(s"Average Rainy Temp is ${rainyTemps.sum/rainyTemps.length}")
 
 
-    //continue from part 4 scala.
+    val monthGroups = data.groupBy(_.month)
+    val monthlyTemp = monthGroups.map{case (m,days)=> m->days.foldLeft(0.0)((sum,td)=>sum+td.tmax)/days.length}
+    println(monthlyTemp)
+    monthlyTemp.toSeq.sortBy(_._1) foreach println
+    
+    //Continue from 6
   }
 
 }
